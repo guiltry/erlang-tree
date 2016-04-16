@@ -34,6 +34,15 @@ insert(NewVal, {node, {Val, Smaller, Bigger}}) when NewVal > Val ->
   {node, {Val, Smaller, insert(NewVal, Bigger)} }.
 
 %%--------------------------------------------------------------------
+generate(N) ->
+  generate_process(N, empty()).
+
+generate_process(N, Node) when N =:= 0 ->
+  Node;
+generate_process(N, Node) ->
+  generate_process(N-1, insert(N, Node)).
+
+%%--------------------------------------------------------------------
 lookup(Target, Node) ->
   lookup_process(Target, Node, 0).
 
@@ -98,6 +107,12 @@ lookup_not_found_bigger_test() ->
   Tree = insert(1, empty()),
 
   {false, 1} = lookup(10, Tree).
+
+lookup_efficiency_skipped() ->
+  Tree = generate(100),
+  io:write(Tree),
+
+  {true, 1} = lookup(10, Tree).
 
 %%--------------------------------------------------------------------
 
